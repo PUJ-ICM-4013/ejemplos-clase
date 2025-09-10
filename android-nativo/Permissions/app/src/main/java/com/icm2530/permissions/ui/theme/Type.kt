@@ -1,4 +1,4 @@
-package com.icm2510.permissions.ui.theme
+package com.icm2530.permissions.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

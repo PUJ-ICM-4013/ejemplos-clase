@@ -1,4 +1,4 @@
-package com.icm2510.permissions
+package com.icm2530.permissions
 
 import org.junit.Test
 

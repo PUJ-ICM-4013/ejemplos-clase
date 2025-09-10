@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.icm2510.permissions"
-    compileSdk = 35
+    namespace = "com.icm2530.permissions"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.icm2510.permissions"
+        applicationId = "com.icm2530.permissions"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 

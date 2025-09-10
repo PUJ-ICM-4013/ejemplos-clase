@@ -1,5 +1,8 @@
-package com.icm2510.permissions
+package com.icm2530.permissions
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +37,7 @@ fun RequestPermission(
 ) {
     // Crear un estado de permiso para el permiso solicitado
     val permissionState = rememberPermissionState(permission)
+    val context = LocalContext.current
 
     // Manejar la solicitud de permiso
     HandleRequest(
@@ -42,7 +47,15 @@ fun RequestPermission(
                 deniedMessage = deniedMessage,
                 rationaleMessage = rationaleMessage,
                 shouldShowRationale = shouldShowRationale,
-                onRequestPermission = { permissionState.launchPermissionRequest() }
+                onRequestPermission = { permissionState.launchPermissionRequest() },
+                onGoToSettings = {
+                    // Abrir ajustes de la aplicación cuando el permiso es denegado permanentemente
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    context.startActivity(intent)
+                }
             )
         },
         content = {
@@ -75,7 +88,7 @@ private fun HandleRequest(
 
 // Contenido de la pantalla
 @Composable
-fun Content(text: String, showButton: Boolean = true, onClick: () -> Unit) {
+private fun Content(text: String, showButton: Boolean = true, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -96,11 +109,12 @@ fun Content(text: String, showButton: Boolean = true, onClick: () -> Unit) {
 // Contenido de la pantalla cuando se deniega el permiso
 @ExperimentalPermissionsApi
 @Composable
-fun PermissionDeniedContent(
+private fun PermissionDeniedContent(
     deniedMessage: String,
     rationaleMessage: String,
     shouldShowRationale: Boolean,
-    onRequestPermission: () -> Unit
+    onRequestPermission: () -> Unit,
+    onGoToSettings: () -> Unit
 ) {
     if (shouldShowRationale) {
         AlertDialog(
